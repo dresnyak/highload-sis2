@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+package tasktracker.v1;
+
+option go_package = "highload-sis2/gen/tasktracker/v1;taskv1";
+
+import "google/protobuf/empty.proto";
+import "tasktracker/v1/common.proto";
+
+service TaskService {
+  rpc CreateTask(CreateTaskRequest) returns (Task);
+  rpc GetTask(GetTaskRequest) returns (Task);
+  rpc ListTasks(ListTasksRequest) returns (ListTasksResponse);
+  rpc UpdateTask(UpdateTaskRequest) returns (Task);
+  rpc DeleteTask(DeleteTaskRequest) returns (google.protobuf.Empty);
+}
+
+message CreateTaskRequest {
+  string title = 1;
+  string description = 2;
+  optional int64 group_id = 3;
+  int32 priority = 4;
+  string idempotency_key = 5;
+}
+
+message UpdateTaskRequest {
+  int64 id = 1;
+  int64 expected_version = 2;
+  optional string title = 3;
+  optional string description = 4;
+  optional TaskStatus status = 5;
+  optional int32 priority = 6;
+}
+
+enum Scope {
+  SCOPE_UNSPECIFIED = 0;
+  SCOPE_PERSONAL = 1;
+  SCOPE_GROUP = 2;
+}
+
+enum SortBy {
+  SORT_BY_UNSPECIFIED = 0;
+  SORT_BY_PRIORITY = 1;
+  SORT_BY_CREATED_AT = 2;
+}
+
+message ListTasksRequest {
+  Scope scope = 1;
+  optional int64 group_id = 2;
+  repeated TaskStatus statuses = 3;
+  SortBy sort_by = 4;
+  int32 page_size = 5;
+  string page_token = 6;
+}
+
+message ListTasksResponse {
+  repeated Task tasks = 1;
+  string next_page_token = 2;
+}
+
+message GetTaskRequest {
+  int64 id = 1;
+}
+
+message DeleteTaskRequest {
+  int64 id = 1;
+}

@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package tasktracker.v1;
+
+option go_package = "highload-sis2/gen/tasktracker/v1;taskv1";
+
+import "google/protobuf/timestamp.proto";
+
+enum TaskStatus {
+  TASK_STATUS_UNSPECIFIED = 0;
+  TASK_STATUS_PLANNED = 1;
+  TASK_STATUS_IN_PROGRESS = 2;
+  TASK_STATUS_COMPLETED = 3;
+}
+
+message Task {
+  int64 id = 1;
+  int64 author_id = 2;
+  optional int64 group_id = 3;
+  string title = 4;
+  string description = 5;
+  TaskStatus status = 6;
+  int32 priority = 7;
+  int64 version = 8;
+  google.protobuf.Timestamp created_at = 9;
+  google.protobuf.Timestamp updated_at = 10;
+}
+
+enum GroupRole {
+  GROUP_ROLE_UNSPECIFIED = 0;
+  GROUP_ROLE_OWNER = 1;
+  GROUP_ROLE_MEMBER = 2;
+}
+
+message Group {
+  int64 id = 1;
+  int64 owner_id = 2;
+  string name = 3;
+  int32 member_count = 4;
+  int32 max_members = 5;
+  google.protobuf.Timestamp created_at = 6;
+}

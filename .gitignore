@@ -1,0 +1,7 @@
+.idea/
+.env
+*.exe
+/bin/
+bench/results/*.tmp
+SPEC.md
+CLAUDE.md
